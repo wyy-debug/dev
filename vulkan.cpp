@@ -2,7 +2,8 @@
 
 int main(void)
 {
-
+    /***/
+    /*创建实例*/
     typedef struct VkApplicationInfo {
         VkStructureType sType;//VK_STRUCTURE_TYPE-APPLICATION_INFO
         const void* pNext;//nullptr
@@ -29,6 +30,21 @@ int main(void)
         const VkAllocationCallbacks* pAllocator,
         VkInstance* pInstance);
 
+    /*查找设备*/
+    VkResult vkEnumeratePhysicalDevices(
+        VkInstance instance,
+        uint32_t*  pPhysicalDeviceCount,
+        VkPhysicalDevice* pPhysicalDevices
+    );
+
     
+
+
+
+
+
     return 0
 }
+
+
+
