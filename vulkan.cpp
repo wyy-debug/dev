@@ -37,9 +37,23 @@ int main(void)
         VkPhysicalDevice* pPhysicalDevices
     );
 
-    
+    typedef struct VkPhysicalDeviceProperties {
+        uint32_t    apiVersion;
+        uint32_t    driverVersion;
+        uint32_t    vendorID;
+        uint32_t    deviceID;
+        VkPhysicalDeviceType    deviceType;
+        char    deviceName  [VK_MAX_PHYSICAL_DEVICE_NAME_SIZE];
+        uint8_t pipelineCacheUUIDp[VK_UUID_SIZE];
+        VkPhysicalDeviceLimits  limits;
+        VkPhysicalDeviceSparseProperties    sparseProperties;
+    }VkPhysicalDeviceProperties;
 
-
+    //判断设备支持特性
+    void vkGetPhysicalDeviceFeatures(
+        VkPhysicalDevice    physicalDevice,
+        vkPhysicalDeviceFeatures*   pFeatures
+    );
 
 
 
