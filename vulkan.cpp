@@ -191,7 +191,132 @@ int main(void)
     );
 
 
+    //VkAllocationCallbacks
+    typedef struct  VkAllocationCallbacks
+    {
+        void*   pUserData;
+        PFN_vkAllocationFunction    pfnAllocation;
+        PFN_vkReallocationFunction  pfnReallocation;
+        PFN_vkFreeFunction         pfnFree;
+        PFN_vkInternalAllocationNotification    pfnInternalAllocation;
+        PFN_vkInternalFreeNotification    pfnInternalFree;
+        /* data */
+    }VkAllocationCallbacks;
+    
+
+    void* VKAPI_CALL Allocation(
+        void*   pUserData;
+        size_t  size,
+        size_t  alignment,
+        VkSystemAllocationScope allocationScope);
+
+    void* VKAPI_CALL Reallocation(
+        void*   pUserData,
+        void*   pOriginal,
+        size_t  size,
+        size_t  alignment,
+        VkSystemAllocationScope allocationScope
+    );
+
+    void* VKAPI_CALL Free(
+        void* pUserData,
+        void* pMemory
+    );
+    void* VKAPI_CALL InternalAllocationNotification(
+        void*   pUserData,
+        size_t  size,
+        VkInternalAllocationType allcationType,
+        VkSystemAllocationScope allcationScope
+    );
+    void* VKAPI_CALL InternalFreeNotification(
+        void*   pUserData,
+        size_t size,
+        VkInternalAllocationType allocationType,
+        VkSystemAllocationScope allcationScope
+    );
     return 0
+
+    //缓冲区
+    VkReslut vkCreateBuffer(
+        VkDevice device,
+        const VkBufferCreateInfo* pCreatInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkBuffer* pBuffer
+    );
+
+    typedef struct VkBufferCreateInfo {
+        VkStructureType     sType;
+        const void* pNext;
+        VkBufferCreateFlags flags;
+        VkDeviceSize size;
+        VkBufferUsageFlags usage;
+        VkSharingMode sharingMode;
+        uint32_t queueFamilyIndexCount;
+        const uint32_t* pQueueFamilyIndicesl
+    }VkBufferCreateInfo;
+    //查询格式
+    void VkGetPhysicalDeviceFormatProperties(
+        VkPhysicalDevice physicalDevice,
+        VkFormat format,
+        VkFormatProperties* pFormatProperties
+    );
+
+    typedef struct VkFormatProperties{
+        VkFormateFeatureFlags linearTilingFeatures;
+        VkFormateFeatureFlags optimalTilingFeatures;
+        VkFormateFeatureFlags bufferFeatures;
+    }VkFormatProperties;
+
+    //获取更多格式信息
+    VkResult vkGetPhysicalDeviceImageFormatProperties(
+        VkPhysicalDevice physicalDevice,
+        VkFormat format,
+        VkImageType type,
+        VkImageTiling tiling,
+        VkImageUsageFlags usage,
+        VkImageCreateFlags flags,
+        VkImageFormatProperties* pImageFormatProperties
+    );
+
+    typedef struct VkImageFormatProperties {
+        VkExten3D maxExtent;
+        uint32_t maxMipLevels;
+        uint32_t maxArrayLayers;
+        VkSampleCountFlags sampleCounts;
+        VkDeviceSize maxResoureSize;
+    }VkImageFormatProperties;
+
+    typedef struct VkExtent3D{
+        uint32_t width;
+        uint32_t height;
+        uint32_t depth;
+    }VkExtent3D;
+
+    //图像
+    VkResult vkCreateImage(
+        VkDevice device,
+        const VkImageCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocatpr,
+        VkImage*    pImage
+    );
+
+    typedef struct VkImageCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkImageCreateFlags flags;
+        VkImageType imageType;
+        VkFormat format;
+        VkExtent3D extent;
+        uint32_t mipLevels;
+        uint32_t arrayLayers;
+        VkSampleCountFlagBits samples;
+        VkImageTiling tilingl
+        VkImageUsageFlags usage;
+        VkSharingMode sharingMode;
+        uint32_t queueFamilyIndexCount;
+        const uint32_t* pQueueFamilyIndices;
+        VkImageLayout initialLayout;
+    }VkImageCreateInfo;
 }
 
 
