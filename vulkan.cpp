@@ -317,6 +317,49 @@ int main(void)
         const uint32_t* pQueueFamilyIndices;
         VkImageLayout initialLayout;
     }VkImageCreateInfo;
+
+
+    //线性图像
+    void vkGetImageSubresourceLayout(
+        VkDevice    device,
+        VkImage     image,
+        const VkIamgeSubresource* pSubresource,
+        VkSubresourceLayout*    pLayout
+    );
+
+    typedef struct VkImageSubresource{
+        VkImageAspectFlags aspectMask;
+        uint32_t mipLevel;
+        uint32_t arrayLayer;
+    }VkImageSubresource;
+
+    typedef struct VkSubresourceLayout {
+        VkDeviceSize offset;
+        VkDeviceSize size;
+        VkDeviceSize rowPitch;
+        VkDeviceSize arrayPitch;
+        VkDeviceSize depthPitch;
+    }VkSubresoureLayout;
+
+
+    //资源视图
+
+    VkResult vkCreateBufferView(
+        VkDevice device,
+        const VkBufferViewCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkBufferView* pView
+    );
+
+    typedef struct VkBufferViewCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkBufferViewCreateFlags flags;
+        VkBuffer buffer;
+        VkFormat format;
+        VkDeviceSize offset;
+        VkDeviceSize range;
+    }VkBufferViewCreateInfo;
 }
 
 
