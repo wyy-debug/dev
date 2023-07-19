@@ -637,6 +637,56 @@ int main(void)
     VkResult VkQueueWaitIdle(VkQueue queue);
 
     VkResult VkDeviceWaitIdle(VkDevice device);
+    //管线屏障
+    //同步和改变状态的主要命令
+    void vkCmdPiplineBarrier(
+        VkCommandBufer commandBuffer,
+        VkPipelineStageFlags srcStageMask,
+        VkPipelineStageFlags dstStageMask,
+        VkDependencyFlags   dependencyFlags,
+        uint32_t memoryBarrierCount,
+        uint32_t bufferMemoryBarrierCount,
+        const VkBufferMemoryBarrier* pBufferMemoryBarriers,
+        uint32_t imageMemoryBarrierCount,
+        const VkImageMemoryBarrier* pImageMemoryBarriers
+    );
+
+    //全局内存屏障
+    typedef struct VkMemoryBarrier{
+        VkStructureType sType;
+        const void* pNext;
+        VkAccessFlags srcAccessMask;
+        VkAccessFlags dstAccessMask;
+    }VkMemoryBarrier;
+
+    //缓冲区内存屏障
+    typedef struct VkBufferMemoryBarrier{
+        VkStructureType sType;
+        const void* pNext;
+        VkAccessFlags srcAccessMask;
+        VkAccessFlags dstAccessMask;
+        uint32_t srcQueueFamilyIndex;
+        uint32_t dstQueueFamilyIndex;
+        VkBuffer buffer;
+        VkDeviceSize offest;
+        VkDeviceSize size;   
+    }VkBufferMemoryBarrier;
+
+    //图像内存屏障
+    typedef struct VkImageMemoryBarrier{
+        VkStructureType sType;
+        const void*     pNext;
+        VkAccessFlags   scrAccessMask;
+        VkAccessFlags   dsrAccessMask;
+        VkImageLayout   oldLayout;
+        VkImageLayout   newLayout;
+        uint32_t        srcQueueFamilyIndex;
+        uint32_t        dsrQueueFamilyIndex;
+        VkImage         image;
+        VkImageSubresourceRange subresourceRange;
+    }VkImageMemoryBarrier;
+
+    
 }
 
 
