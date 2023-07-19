@@ -360,6 +360,283 @@ int main(void)
         VkDeviceSize offset;
         VkDeviceSize range;
     }VkBufferViewCreateInfo;
+
+    // 图像视图
+    VkResult vkCreateImageView(
+        VkDevice device,
+        const VkImageViewCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkImageView* pView
+    );
+
+    typedef struct VkImageViewCreateInfo{
+        VkStructType sType;
+        const void* pNext;
+        VkImageViewCreateFlags flags;
+        VkImage image;
+        VkImageViewType viewType;
+        VkFormat format;
+        VkComponentMapping components;
+        VkImageSubresourceRange subresourceRange;
+    }VkImageViewCreateInfo;
+
+    typedef struct VkComponentMapping{
+        VkComponentSwizzle r;
+        VkComponentSwizzle g;
+        VkComponentSwizzle b;
+        VkComponentSwizzle a;
+    }VkComponentMapping;
+
+    typedef struct VkImageSubresourceRange{
+        VkImageAspectFlags aspectMask;
+        uint32_t baseMipLevel;
+        uint32_t levelCount;
+        uint32_t baseArrayLayer;
+        uint32_t layerCount;
+    }VkImageSubresourceRange;
+
+    //销毁资源
+    void vkDestroyBuffer(
+        VkDevice device,
+        VkBuffer buffer,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    void vkDestroyBufferView(
+        VkDevice device,
+        VkBufferView bufferView,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    void vkDestroyImage(
+        VkDevice device,
+        VkImage image,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    void vkDestroyImageView(
+        VkDevice device,
+        VkImageView imageView,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    //设备内存管理
+    VkResult vkAllocateMemory(
+        VkDevice device,
+        const VkMemoryAllocateInfo* pAllocateInfo,
+        const VkAllocationCallbacks pAllocator,
+        VkDeviceMemory* pMemory
+    );
+
+    typedef struct VkMemoryAllocateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkDeviceSize allocationSize;
+        uint32_t memoryTypeIndex;
+    }VkMemoryAllocateInfo;
+
+    void vkFreeMemory(
+        VkDevice device,
+        VkDeviceMemory memory,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    void vkGetDeviceMemoryCommitment(
+        VkDevice device,
+        VkDeviceMemory memory,
+        VkDeviceSize* pCommittedMemoryInBytes
+    );
+
+    //CPU访问设备内存
+    VkResult vkMapMemory(
+        VkDevice device,
+        VkDeviceMemory memory,
+        VkDeviceSize offest,
+        VkDeviceSize size,
+        VkMemoryMapFlags flags,
+        void** ppData
+    );
+
+    //解除映射
+    void vkUnmapMemory(
+        VkDevice device,
+        VkDeviceMemory memory
+    );
+    //刷新缓存
+    vkFlushMappedMemoryRanges(
+        VkDevice device,
+        uint32_t memoryRangeCount,
+        const VkMappedMemoryRange* pMemoryRanges
+    );
+
+    typedef struct VkMappedMemoryRange{
+        VkStructureType sType;
+        const void* pNext;
+        VkDeviceMemory memory;
+        VkDevice offest;
+        VkDevice size;
+    }VkMappedMemoryRnage;
+
+    VkResult vkInvalidateMappedMemoryRanges(
+        VkDevice device,
+        uint32_t memoryRangeCount,
+        const VkMappedMemoryRange* pMemoryRanges
+    );
+
+    //绑定内存到资源
+    void vkGetBufferMemoryRequirements(
+        VkDevice device,
+        VkBuffer buffer,
+        VkMemoryRequirements* pMemoryRequirements
+    );
+
+    void vkGetImageMemoryRequirements(
+        VkDevice device,
+        VkImage image,
+        VkMemoryRequirements* pMemoryRequirements
+    );
+
+    void vkGetBufferMemoryRequirements(
+        VkDevice devcie,
+        VkBuffer buffer,
+        VkMemoryRequirements* pMemoryRequirements
+    );
+
+    void vkGetBufferMemoryRequirements(
+        VkDevice devcie,
+        VkImage image,
+        VkMemoryRequirements* pMemoryRequirements
+    );
+
+    typedef struct VkMemoryRequirements{
+        VkDeviceSize size;
+        VkDeviceSize alignment;
+        uint32_t memoryTypeBits;
+    }VkMemoryRequirements;
+
+    //队列参数
+    typedef struct VkDeviceQueueCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkDeviceQueueCreateFlags flags;
+        uint32_t  queueFamilyIndex;
+        uint32_t  queueCountl
+        const float* pQueuePriorites;
+    }VkDeviceQueueCreateInfo;
+
+    void vkGetDeviceQueue(
+        VkDevice device,
+        uint32_t queueFamilyIndex,
+        uint32_t queueIndex,
+        VkQueue* pQueue
+    );
+    
+    //创建命令缓冲区
+    VkResult VkCreateCommandPool(
+        VkDevice device,
+        const VkCommandPoolCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkCommandPool* pCommandPool
+    );
+
+    typedef struct VkCommandBufferAllocateInfo{
+        VkStructureType sType,
+        const void*     pNext;
+        VkCommandPoolCreateFlags flags;
+        uint32_t    queueFamilyIndex;
+    }VkCommandBufferAllocateInfo;
+    //分配新的缓冲区
+    VkResult VkAllocateCommandBuffers(
+        VkDevice device,
+        const VkCommandBufferAllocateInfo* pAllocateInfo,
+        VkCommandBuffer*    pCommandBuffers
+    );
+
+    typedef struct VkCommandBuffer{
+        VkStrctureType sType;
+        const void* pNext;
+        VkCommandPool pool;
+        VkCommandBufferLevel level;
+        uint32_t commandBufferCount;
+    }VkCommandBuffer;
+
+    //释放命令缓冲区
+    void VkFreeCommandBuffers(
+        VkDevice device,
+        VkCommandPool commandPool,
+        uint32_t commandBufferCount,
+        const VkCommandBuffer* pCommandBuffers
+    );
+
+    //释放命令缓冲区所有资源
+    void VkDestroyCommandPool(
+        VkDevice device,
+        VkCommangPool commandPool,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+
+    //记录命令
+    VkResult VkBeginCommandBuffer (
+        VkCommandBuffer     commandBuffer,
+        const VkCommandBufferBeginInfo* pBeginInfo
+    );
+
+    typedef struct VkEndCommandBufferInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkCommandBufferUsageFlags flags;
+        const VkCommandBufferInheritanceInfo* pInheritanceInfo;
+    }VkCommandBufferBeginInfo;
+
+    //在缓冲区间复制数据
+
+    void VkCmdCopyBuffer(
+        VkCommandBuffer     commandBuffer,
+        VkBuffer            srcBuffer,
+        VkBuffer            dstBuffer,
+        uint32_t            regionCount,
+        const VkBufferCopy* pRegions
+    );
+
+    typedef struct VkBuffer{
+        VkDeviceSize srcOffset;
+        VkDeviceSize dstOffset;
+        VkDeviceSize size;
+    }VkBufferCopy;
+
+    //发送命令给设备
+    VkResult VkEndCommandBuffer(VkCommandBuffer commandBuffer);
+
+    //回收利用命令缓冲区
+    VkResult VkResetCommandBuffer(VkCommandBuffer commandBuffer,VkCommandBufferResetFlags flags);
+
+    //一次性重置命令缓冲区
+    VkResult VkResetCommandPool(VkDevice device,VkCommandPool commandPool,VkCommandPoolResetFlags flags);
+
+    //命令提交给队列
+    VkResult VkQueueSubmit(
+        VkQueue     queue,
+        uint32_t    submitCount,
+        const VkSubmitInfo* pSubmits,
+        VkFence     fence
+    );
+
+    typedef struct VkSubmitInfo{
+        VkStuctureType  sType;
+        const void*     pNext;
+        uint32_t        waitSemaphoreCount;
+        const VkSemaphore* pWaitSemaphores;
+        const VkPipelineStageFlags* pWaitDstStageMask;
+        uint32_t        commandBufferCount;
+        const VkCommandBuffer* pCommandBuffers;
+        uint32_t    signalSemaphoreCount;
+        const VkSemaphore*  pSignalSemaphores;
+    }VkSubmitInfo;
+
+    VkResult VkQueueWaitIdle(VkQueue queue);
+
+    VkResult VkDeviceWaitIdle(VkDevice device);
 }
 
 
