@@ -686,7 +686,396 @@ int main(void)
         VkImageSubresourceRange subresourceRange;
     }VkImageMemoryBarrier;
 
+    //清除和填充缓冲区
+    //填入缓冲区
+    void vkCmdFillBuffer(
+        VkCommandBuffer commandBuffer,
+        VkBuffer dstBuffer,
+        VkDeviceSize dstOffset,
+        VkDeviceSize size,
+        uint32_t    data
+    );
     
+    //把数据放入缓冲区对象
+    vkCmdUpdateBuffer(
+        VkCommandBuffer commandBuffer,
+        VkBuffer dstBuffer,
+        VkDeviceSize dstOffest,
+        VkDeviceSize dataSize,
+        const uint32_t* pData
+    );
+    
+    //清空和填充图像
+    void vkCmdClearColorImage(
+        VkCommandBuffer commandBuffer,
+        VkImage image,
+        VkImageLayout imageLayout,
+        const VkClearColorValue* pColor,
+        uint32_t rangeCount,
+        const VkImageSubresourceRange* pRanges
+    );
+
+    typedef union VkClearColorValue{
+        float float32[4];
+        int32_t int32[4];
+        uint32_t uint32_t;
+    }VkClearColorValue;
+
+    typedef struct VkImageSubresourceRange{
+        VkImageAspectFlags aspectMask;
+        uint32_t    baseMipLevel;
+        uint32_t    levelCount;
+        uint32_t    baseArrayLayer;
+        uint32_t    layerCount;
+    }VkImageSubresouceRange;
+
+    //清除深度-模板图像
+    void vkCmdClearDepthStencilImage(
+        VkCommandBuffer     commandBuffer,
+        VkImage               image,
+        VkImageLayout         imageLayout,
+        const VkClearDepthStencilValue* pDepthStencil,
+        uint32_t                rangeCount,
+        const VkImageSubresourceRange* pRanges
+    );
+
+    typedef struct VkClearDepthStenciValue{
+        float depth;
+        uint32_t stencil;
+    }VkClearDepthStenciValue;
+
+    //复制图片数据
+    void vkCmdCopyBufferToImage(
+        VkCommandBuffer commandBuffer,
+        VkBuffer srcBuffer,
+        VkImage dstImage,
+        VkImageLayout dstImageLayout,
+        uint32_t regionCount,
+        const VkBufferImageCopy* pRegions
+    );
+
+    typedef struct VkBufferImageCopy{
+        VkDeviceSize bufferOffset;
+        uint32_t    bufferRowLength;
+        uint32_t    bufferImageLength;
+        VkImageSubresourceLayers imageSubresource;
+        VkOffset3D      imageOffset;
+        VkExtent3D      imageExtent;
+    }VkBufferImageCopy;
+
+    typedef struct VkImageSubersourceLayers{
+        VkImageAspectFlags  aspectMask;
+        uint32_t    mipLevel;
+        uint32_t    baseArrayLayer;
+        uint32_t    layerCount;
+    }VkImageSubresourceLayers;
+
+    //从图像复制到缓冲区
+    void vkCmdCopyImageToBuffer(
+        VkCommandBuffer     commandBuffer,
+        VkImage             srcImage,
+        VkImageLayout       srcImageLayout,
+        VkBuffer            dstBuffer,
+        uint32_t                regionCount,
+        const VkBufferImageCopy* pRegions
+    );
+
+    //图像之间复制
+    void vkCmdCopyImage(
+        VkCommandBuffer commandBuffer,
+        VkImage srcImage,
+        VkImageLayout srcImageLayout,
+        VkImage dstImage,
+        VkImageLayout dstImageLayout,
+        uint32_t regionCount,
+        const VkImageCopy* pRegions
+    );
+
+    typedef struct VkImageCopy {
+        VkImageSubresourceLayers srcSubresource;
+        VkOffset3D  srcOffset;
+        VkImageSubresourceLayers dstSubresource;
+        VkOffset3D  dstOffset;
+        VkExtent3D  extent;
+    }VkImageCopy;
+
+    //拉伸图像
+    void vkCmdBlitImage(
+        VkCommandBuffer commandBuffer,
+        VkImage srcImage,
+        VkImageLayout srcImageLayout,
+        VkImage dstImage,
+        VkImageLayout dstImageLayout,
+        unit32_t regionCount,
+        const VkImageBlit* pRegions,
+        VkFilter filter
+    );
+
+    typedef struct VkImageBlit {
+        VkImageSubresourceLayers srcSubresource;
+        VkOffset3D      srcOffset[2];
+        VkImageSubresourceLayers dstSubresource;
+        VkOffset3D      dstOffset[2];
+    }VkImageBlit;
+    //在windows展现
+    //判断队列是否支持展示操作
+    VkBool32 vkGetPhysicalDeviceWin32PresentationSupportKHR(
+        VkPhysicalDevice    physicalDevice,
+        uint32_t                queueFamilyIndex
+    );
+    //创建表面
+    VkResult vkCreateWin32SurfaceKHR(
+        VkInstance instance,
+        const VkWin32SurfaceCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkSurfaceKHR* pSurface
+    );
+
+    typedef struct VkWin32SurfaceCreateInfoKHR {
+        VkStructure Type    sType;
+        const void*         pNext;
+        VkWin32SurfaceCreateFlagsKHR flags;
+        HINSTANCE           hinstance;
+        HWND              hwnd;
+    }VkWin32SurfaceCreateInfoKHR;
+
+    //在Xlib平台展示
+    VkBool32 vkGetPhysicalDeviceXlibPresentationSupportKHR(
+        VkPhysicalDevice    physicalDevice,
+        uint32_t            queueFamilyIndex,
+        Display*            dpy,
+        VisualID            visualID
+    );
+
+    VkResult vkCreateXlibSurfaceKHR(
+        VkInstance instance,
+        const VkXlibSurfaceCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkSurfaceKHR* pSurface
+    );
+
+    typedef struct VkXlibSurfaceCreateInfoKHR{
+        VkStructureType sType;
+        const void* pNext;
+        VkXlibSurfaceCreateFlagsKHR flags;
+        Display dpy;
+        Window  window;
+    }VkXlibSurfaceCreateInfoKHR;
+
+    //在xcb上展示
+    VkBool32 vkGetPhysicalDeviceXcbPresentationSupportKHR(
+        VkPhysicalDevice physicalDevice,
+        uint32_t queueFamilyIndex,
+        xcb_connection_t* connection,
+        xcb_visualid_t  visual_id
+    );
+
+    VkReslut vkCreateXcbSurfaceKHR(
+        VkInstance instance,
+        const VkXcbSurfaceCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks*     pAllocator,
+        VkSurfaceKHR* pSurface
+    );
+
+    typedef struct VbXcbSurfaceCreateInfoKHR{
+        VkStructureType sType;
+        const void*     pNext;
+        VkXcbSurfaceCrateFlagsKHR flags;
+        xcb_connection_t*   connection;
+        xcb_window_t        window;
+    }VkXcbSurfaceCreateInfoKHR;
+
+    //交换链
+    VkResult vkCreateSwapchainKHR(
+        VkDevice device,
+        const VkSwapchainCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks*    pAllocator,
+        VkSwapchainKHR* pSwapchain
+    );
+
+    typedef struct VkSwapchainCreateInfoKHR{
+        VkStructureType sType,
+        const void*     pNext,
+        VkSwapchainCreateFlagsKHR flags,
+        VkSurfaceKHR    surface,
+        uint32_t    minImageCount,
+        VkFormat    imageFormat,
+        VkColorSpaceKHR imageColorSpace,
+        VkExtent2D  imageExtent,
+        uint32_t    imageArrayLayers,
+        VkImageUsageFlags   imageUsage,
+        VkSharingMode   imageSharingMode,
+        uint32_t        queueFamilyIndexCount,
+        const uint32_t* pQueueFamilyIndices,
+        VkSurfaceTransformFlagBitsKHR   perTransform;
+        VkCompositeAlphaFlagBitsKHR     compositeAlpha;
+        VkPresentModeKHR                resentMode;
+        VkBool32                        clipped;
+        VkSwapchainKHR                  oldSwapchain;
+    }VkSwapchainCreateInfoKHR;
+
+    VkResult vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
+        VkPhysicalDevice    physicalDevice,
+        VkSurfaceKHR        surface,
+        VkSurfaceCapabilitiesKHR    pSurfaceCapabilities
+    );
+
+    typedef struct VkSurfaceCapabilitiesKHR{
+        uint32_t    minImageCount;
+        uint32_t    maxImageCount;
+        VkExtent2D  currentExtent;
+        VkExtent2D  minImageExtent;
+        VkExtent2D  maxImageExtent;
+        uint32_t    maxImageArrayLayers;
+        VkSurfaceTransformFlagsKHR supportedTransforms;
+        VkSurfaceTransformFlagsBitsKHR  currentTransform;
+        VkCompositeAlphaFlagsKHR        supportedCompositeAlpha;
+        VkImageUsageFlags               supportedUsageFlags;
+    }VkSurfaceCapabilitiesKHR;
+    //获取图像局部
+    VkResult vkGetSwapchainImagesKHR(
+        VkDevice device,
+        VkSwapchainKHR swapChain,
+        uint32_t*   pSwapchainImageCount,
+        VkImage*    pSwapchainImages
+    );
+
+
+    VKAPI_ATTR VkResult VKAPI_CALL vkGetPhysicalDeviceSurfaceFormatsKHR(
+        VkPhysicalDevice    physicalDevice,
+        VkSurfaceKHR        surface,
+        uint32_t*           pSurfaceFormatCount,
+        VkSurfaceFormatKHR* pSurfaceFormats
+    );
+
+    typedef struct VkSurfaceFormatKHR{
+        VkFormat    format;
+        VkColorSpaceKHR colorSpace;
+    }VkSurfaceFormatKHR;
+    //获取下一图像
+    VkResult vkAcquireNextImageKHR(
+        VkDevice    device,
+        VkSwapchainKHR swapChain,
+        uint64_t timeout,
+        VkSemaphore semaphore,
+        VkFence fence,
+        uint32_t* pImageIndex
+    );
+
+    //全屏表面
+    VkResult vkGetPhysicalDeviceDisplayPropertiesKHR(
+        VkPhysicalDevice physicalDevice,
+        uint32_t*   pPropertyCount,
+        VkDisplayPropertiesKHR* pProperties
+    );
+
+    typedef struct VkDisplayPropertiesKHR {
+        VkDisplayKHR display;
+        const char* displayName;
+        VkExtent2D  physicalDimensions;
+        VkExtent2D  physicalResolution;
+        VkSurfaceTransformFlagsKHR supportedTransforms;
+        VkBool32 planeReordePossible;
+        VkBool32 presistentContent;
+    }VkDisplayPropertiesKHR;
+
+    //查询设备支持的平面个数和类型
+    VkResult vkGetPhysicalDeviceDisplayPlanePropertiesKHR(
+        VkPhysicalDevice physicalDevice,
+        uint32_t*   pPropertyCount,
+        VkDisplayPlanePropertiesKHR* pProperties
+    );
+
+    typedef struct VkDisplayPlanePropertiesKHR {
+        VkDisplayKHR currentDisplay,
+        uint32_t currentStackIndex;
+    }VkDisplayPlanePropertiesKHR;
+
+    //获知哪个显示设备对平面可见
+    VkResult vkGetDisplayPlaneSupportedDisplaysKHR(
+        VkPhysical physicalDevice,
+        uint32_t   planeIndex,
+        uint32_t   pDisplayCount,
+        VkDisplayKHR* pDisplays
+    );
+
+    //查询屏幕属性
+    VkResult vkGetDisplayPlaneCapabilitiesKHR(
+        VkPhysical physicalDevice,
+        VkDisplayModeKHR mode,
+        uint32_t  planeIndex,
+        VkDisplayPlaneCapabilitiesKHR* pCapabilities
+    );
+
+    typedef struct VkDisplayPlaneCapabilitiesKHR {
+        VkDisplayPlaneAlphaFlagsKHR     supportedAlpha;
+        VkOffset2D                      minSrcPosition;
+        VkOffset2D                      maxSrcPosition;
+        VkExtent2D                      minSrcExtent;
+        VkExtent2D                      maxSrcExtent;
+        VkOffset2D                      minDstPosition;
+        VkOffset2D                      maxDstPosition;
+        VkExtent2D                      minDstExtent;
+        VkExtent2D                      maxDstExtent;
+    }VkDisplayPlaneCapabilitiesKHR;
+
+    //获取每一个显示器预定义的显示模式
+    VkResult vkGetDisplayModePropertiesKHR(
+        VkPhysicalDevice    physicalDevice,
+        VkDisplayKHR        display,
+        uint32_t            pPropertyCount,
+        VkDisplayModePropertiesKHR* pProperties
+    );
+
+    typedef struct VkDisplayModePropertiesKHR{
+        VkDisplayModeKHR    displayMode;
+        VkDisplayModeParametersKHR parameters;
+    }VkDisplayModePropertiesKHR;
+
+
+    typedef struct VkDisplayModeParmetersKHR {
+        VkExtent2D  visibleRegion;
+        uint32_t    refreshRate;
+    }VkDisplayModeParmetersKHR;
+
+
+    //创建新的显示模式
+    VkResult vkCreateDisplayModeKHR(
+        VkPhysicalDevice physicalDevice,
+        VkDisplayKHR     display,
+        const VkDisplayModeCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkDisplayModeKHR*    pMode
+    );
+
+    typedef struct VkDisplayModeCreateInfoKHR {
+        VkStuctureType sType;
+        const void*     pNext;
+        VkDisplayModeCreateFlagsKHR flags;
+        VkDisplayModeParametersKHR modeParameters;
+    }VkDisplayModeCreateInfoKHR;
+
+    //指代窗口表面使用它
+    VkResult vkCreateDisplayPlaneSurfaceKHR(
+        VkInstance instance,
+        const VkDisplaySurfaceCreateInfoKHR* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkSurfaceKHR* pSurface
+    );
+
+    typedef struct VkDisplaySurfaceCreateInfoKHR {
+        VkStructureType sType;
+        const void*     pNext;
+        VkDisplaySurfaceCreateFlagsKHR flags;
+        VkDisplayModeKHR               displayMode;
+        uint32_t        planeIndex;
+        uint32_t        planeStackIndex;
+        VkSurfaceTransformFlagBitsKHR   transform;
+        float           globalAlpha;
+        VkDisplayPlaneAlphaFlagBitsKHR  alphaMode;
+        VkExtent2D      imageExtent;
+    }VkDisplaySurfaceCreateInfoKHR;
+
 }
 
 
