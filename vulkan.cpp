@@ -1074,9 +1074,38 @@ int main(void)
         float           globalAlpha;
         VkDisplayPlaneAlphaFlagBitsKHR  alphaMode;
         VkExtent2D      imageExtent;
-    }VkDisplaySurfaceCreateInfoKHR;
+    }VkDisplaySurfaceCreateInfoKHR; 
+
+    //执行展示
+    //查询队列是否可以展示
+    VkResult vkGetPhysicalDeviceSurfaceSupportKHR(
+        VkPhysicalDevice physicalDevice,
+        uint32_t        queueFamilyIndex,
+        VkSurfaceKHR     surface,
+        VkBool32*        pSupported
+    );
+    //提交到队列
+    VkResult vkQueuePresentKHR(
+        VkQueue     queue,
+        const VkPresentInfoKHR* pPresentInfo
+    );
+
+    typedef struct VkPresentInfoKHR{
+        VkSturctureType     sType;
+        const void*         pNext;
+        uint32_t            waitSemaphoreCount;
+        const VkSemaphore*  pWaitSemphores;
+        uint32_t            swapChainCount;
+        const VkSwapchainKHR*   pSwapchains;
+        const uint32_t*         pImageIndices;
+        VkResult*               pResults;
+    }VkPresentInfoKHR;
+    //清除
+    //销毁交换链
+    void vkDestroySwapchainKHR(
+        VkDevice device,
+        VkSwapchainKHR swapchain,
+        const VkAllocationCallbacks* pAllocator
+    );
 
 }
-
-
-
