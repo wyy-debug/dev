@@ -1108,4 +1108,303 @@ int main(void)
         const VkAllocationCallbacks* pAllocator
     );
 
+    //创建着色器对象模块
+    VkResult vkCreateShaderModule(
+        VkDevice device,
+        const VkShaderModuleCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks*    pAllocator,
+        VkShaderModule*                 pShaderModule
+    );
+
+    typedef struct VkShaderModuleCreateInfo {
+        VkStructureType sType;
+        const void*     pNext;
+        VkShaderModuleCreateFlags flags;
+        size_t codeSize;
+        const uint32_t* pCode;
+    }VkShaderModuleCreateInfo;
+
+    //销毁释放资源
+    void vkDestroyShaderModule(
+        VkDevice device,
+        VkShaderModule shaderModule,
+        const VkAllocationCallbacks* pAllocator
+    );
+    //创建管线
+    VkResult vkCreateComputePipelines(
+        VkDevice device,
+        VkPipelineCache pipelineCache,
+        uint32_t    createInfoCount,
+        const VkComputePipelineCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks*    pAllocator,
+        VkPipeline*     pPipelines
+    );
+    typedef struct VkComputePipelineCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineCreateFlags flags;
+        VkPipelineLayout    layout;
+        VkPipeline      basePipelineHandle;
+        int32_t         basePipelineIndex;
+    }VkComputePipelineCreateInfo;
+
+    typedef struct VkPipelineShaderStageCreateInfo{
+        VkStructureType     sType;
+        const void*         pNext;
+        VkPipelineShaderStageCreateFlags flags;
+        VkShaderStageFlagBits       stage;
+        VkShaderModule          module;
+        const char*             pName;
+        const VkSpecializationInfo*     pSpecializationInfo;
+    }VkPipelineShaderStageCreateInfo;
+
+    typedef struct VkSpecializationInfo {
+        uint32_t     mapEntryCount;
+        const VkSpecializationMapEntry* pMapEntries;
+        size_t dataSize;
+        const void* pData;
+    }VkSpecializationInfo;
+
+    typedef struct VkSpecializationMapEntry {
+        uint32_t constantID;
+        uint32_t offset;
+        size_t size;
+    }VkSpecializationMapEntry;
+
+    //销毁管线
+    void vkDestroyPipeline(
+        VkDevice device,
+        VkPipeline  pipeline
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    //加速管线
+    //管线缓存
+    VkResult vkCreatePipelineCache(
+        VkDevice device,
+        const VkPipelineCacheCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks*    pAllocator,
+        VkPipelineCache*        pPipelineCache
+    );
+
+    typedef struct VkPipelineCacheCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineCacheCreateFlags flags;
+        size_t  initalDataSize;
+        const void* pInitalData;        
+    }VkPipelineCacheCreateInfo;
+
+    //从缓存中取出数据
+    VkResult vkGetPipelineCacheData (
+        VkDevice device,
+        VkPipelineCache pipelinecache,
+        size_t* pDataSize,
+        void*   pData
+    );
+
+    //缓存头部布局
+    typedef struct VkPipelineCacheHeader {
+        uint32_t length;
+        uint32_t version;
+        uint32_t verdorID;
+        uint32_t deviceID;
+        uint32_t uuid[16];
+    }VkPipelineCacheHeader;
+
+    //合并缓存对象
+    VkResult vkMergePipelineCaches(
+        VkDevice device,
+        VkPipelineCache dstCache,
+        uint32_t srcCacheCount,
+        const VkPipelineCache*  pSrcCaches
+    );
+    //销毁
+    void vkDestoryPipelineCache(
+        VkDevice device,
+        VkPipelineCache pipelineCache,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    //绑定管线
+    void vkCmdBindPipeline(
+        VkCommandBuffer commandBuffer,
+        VkPipelineBindPoint pipelineBindPoint,
+        VkPipeline pipeline
+    );
+    //执行工作
+    //使用计算管线分发全局工作组
+    void vkCmdDispatch(
+        VkCommandBuffer buffer,
+        uint32_t x,
+        uint32_t y,
+        uint32_t z
+    );
+
+    //间接分发
+    void vkCmdDispatchIndirect(
+        VkCommandBuffer commandBuffer,
+        VkBuffer buffer,
+        VkDeviceSize offset
+    );
+
+    typedef struct VkDispatchIndirectCommand{
+        uint32_t x;
+        uint32_t y;
+        uint32_t z;
+    }VkDispatchIndirectCommand;
+    //描述符集
+    //创建描述符集
+    VkResult vkCreateDescriptorSetLayout(
+        VkDevice device,
+        const VkDescriptorSetLayoutCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks*           pAllocator,
+        VkDescriptorSetLayout*                 pSetLayout
+    );
+
+    typedef struct VkDescriptorSetLayoutCreateInfo {
+        VkStructureType     sType;
+        const void*         pNext;
+        VkDescriptorSetLayoutCreateFlags flags;
+        uint32_t            bindingCount;
+        const VkDescriptorSetLayoutBinding* pBindings;
+    }VkDescriptorSetLayoutCreateInfo;
+
+    typedef struct VkDescriptorSetLayoutBinding {
+        uint32_t binding;
+        VkDescriptorType descriptorType;
+        uint32_t descriptorCount;
+        VkShaderStageFlags stageFlags;
+        const*  VkSampler* pImmutableSmaplers;
+    }VkDescriptorSetLayoutBinding;
+
+    //将描述集打包到管线中
+    VkResult vkCreatePipelineLayout(
+        VkDevice device,
+        const VkPipelineLayoutCreateInfo* pCreateInfo,
+        const VkAllocatioCallbacks* pAllocator,
+        VkPipelineLayout*   pPipelineLayout
+    );
+
+    typedef struct VkPipelineLayoutCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineLayoutCreateFlags flags;
+        uint32_t    setLayoutCount;
+        const VkDescriptorSetLayout*    pSetLayouts;
+        uint32t pushConstantRangCount;
+        const VkPushConstantRange*  pPushConstantRanges;
+    }VkPipelineLayoutCreateInfo;
+    //销毁管线布局对象
+    void vkDestroyPipelineLayout(
+        VkDevice device,
+        VkPipelineLayout pipelineLayout,
+        const VkAllocationCallbacks* pAllocator
+    );
+    //销毁描述符集布局对象
+    void vkDestroyDescriptorSetLayout(
+        VkDevice device,
+        VkDescriptorSetLayout descriptorSetLayout,
+        const VkAllocationCallbacks* pAllocator
+    );
+    //绑定资源到描述符集
+    //创建描述符集缓冲区
+    VkResult vkCreateDescriptorPool(
+        VkDevice device,
+        const VkDescriprotPoolCreateInfo*   pCreate,
+        const VkAllocationCallbacks* pAllocator,
+        VkDescriptorPool*   pDescriptorPool
+    );
+
+    typedef struct VkDescripotrPoolCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkDescriptorPoolCreateFlags flags;
+        uint32_t maxSets;
+        unit32_t poolSizeCount;
+        const VkDescriptorPoolSize* pPoolSize;
+    }VkDescriptorPoolInfo;
+
+    typedef struct VkDescriptorPoolSize{
+        VkDescriptorType type;
+        uint32_t    descriptorCount;
+    }VkDescriptorPoolSize;
+    //创建对象
+    VkResult vkAllocateDescriptorSets(
+        VkDevice device,
+        const VkDescriptorSetAllocateInfo* pAllocateInfo,
+        VkDescriptorSet*    pDescriptorSets
+    );
+
+    typedef struct VkDescriptorSetAllocateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkDescriptorPool descriptorPool;
+        uint32_t descriptorSetCount;
+        const VkDescriptorSetLayout* pSetLayouts;
+    }VkDescriptorSetAllocateInfo;
+
+    //释放描述集符
+    VkResult vkFreeDescriptorSets(
+        VkDevice device,
+        VkDescriptorPool descriptorPool,
+        uint32_t descriptorSetCount,
+        const VkDescriptorSet*  pDescriptorSets
+    );
+    //重置缓冲池
+    VkResult vkResetDescriptorPool(
+        VkDevice device,
+        VkDescriptorPool descriptorPool,
+        VkDescriptorResetFlags flags
+    );
+    //销毁对象
+    void DestroyDescriptorPool(
+        VkDevice deivce,
+        VkDescriptorPool descriptorPool,
+        const VkAllocationCallbacks pAllocator
+    );
+    //复制或写入字符集
+    void vkUpdeteDescriptorSets(
+        VkDevice device,
+        uint32_t descriptorWriteCount,
+        const VkWriteDwscriptorSet* pDescriptorWrites;
+        uint32_t    descriptorCopyCount,
+        const VkCopyDescriptorSet*  pDescriptorCopies
+    )
+    
+    typedef struct VkWriteDescriptorSet {
+        VkStructureType sType;
+        const void*     pNext;
+        VkDescriptorSet dstSet;
+        unit32_t dstBinding;
+        unit32_t dstArrayElement;
+        uint32_t descriptorType;
+        const VkDescriptorImageInfo*    pImageInfo;
+        const VkDescriptorBufferInfo*   pBufferInfo;
+        const VkBufferView* pTexelBufferView; 
+    }VkWriteDescriptorSet;
+
+    typedef struct VkDescriptorImageInfo{
+        VkSampler sampler;
+        VkImageView imageView;
+        VkImageLayout imageLayout;
+    }VkDescriptorImageInfo;
+
+    typedef struct VkDescriptorBufferInfo{
+        VkBuffer buffer;
+        VkDeviceSize offset;
+        VkDeviceSize range;
+    }VkDescriptorBufferInfo;
+
+    typedef strucet VkCopyDescriptorSet {
+        VkStructureType sType;
+        const void* pNext;
+        VkDescriptorSet srcSet;
+        uint32_t    srcBinding;
+        uint32_t    srcArrayElement;
+        VkDescriptorSet dstSet;
+        uint32_t    dstBinding;
+        uint32_t    dstArrayElement;
+        uint32_t    descriptorCount;
+    }VkCopyDescriptorSet;
 }
