@@ -1407,4 +1407,210 @@ int main(void)
         uint32_t    dstArrayElement;
         uint32_t    descriptorCount;
     }VkCopyDescriptorSet;
+    //绑定描述符集到缓冲区
+    void vkCmdBindDesriptorSets(
+        VkCommandBuffer commanBuffer,
+        VkPipelineBinfPoint pipelineBingPoint,
+        VkPipelineLayout layout,
+        uint32_t firstSet,
+        uint32_t descriptorSetCount,
+        const VkDescriptorSet* pDescriptorSets,
+        uint32_t dynamicOffsetCount,
+        const uint32_t* pDynamicOffsets
+    );
+    //推送常量
+    typedef struct VkPushConstantRange{
+        VkShaderStageFlags stageFlags;
+        uint32_t offset;
+        uint32_t size;
+    }VkPushConstantRange;
+    //更新一个或多个推送常量
+    void vkCmdPushConstants(
+        VkCommandBuffer commandBuffer,
+        VkPipelineLayout layout,
+        VkShaderStageFlags stageFlags,
+        uint32_t    offset,
+        uint32_t    size,
+        const void* pValues
+    );
+    //采样图像
+    //绑定采样器
+    VkResult vkCreateSampler(
+        VkDevice device,
+        const VkSamplerCreateInfo*  pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkSampler* pSampler
+    );
+
+    typedef struct VkSamplerCreateInfo{
+        VkStructType sType;
+        const void* pNext;
+        VkSamplerCreateFlags flags;
+        VkFilter magFilter;
+        VkFilter minFilter;
+        VkSamplerMipmapMode mipmapMode;
+        VkSamplerAddressMode addressModeU;
+        VkSamplerAddressMode addressModeV;
+        VkSamplerAddressMode addressModeW;
+        float mipLodBias;
+        VkBool32 anisotropyEnable;
+        float maxAnisotropy;
+        VkBool32 compareEnable;
+        VkCompareOp compareOp;
+        float minLod;
+        float maxLod;
+        VkBorderColor borderColor;
+        VkBool32 unnormalizedCoordinates;    
+    }VkSamplerCreateInfo;
+
+
+    //绘制命令
+    void vkCmdDraw(
+        VkCommandBuffer commandBuffer,
+        uint32_t    vertexCount,
+        uiny32_t    instanceCount,
+        uint32_t    firstIndex,
+        uint32_t    firstInstance
+    );
+    
+    //创建渲染通道
+    VkResult vkCreateRenderPass(
+        VkDevice device,
+        const VkRenderPassCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkRenderPass* pRenderPass
+    );
+
+    typedef struct VkRenderPassCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkRenderPassCreateFlags flags;
+        uint32_t    attachmentCount;
+        const VkAttachmentDescription* pAttachments;
+        uint32_t    subpassCount;
+        const VkSubpassDesription* pSubpasses;
+        uint32_t    dependencyCount;
+        const VkSubpassDependency*  pDependencies;
+    }VkRenderPassCreateInfo;
+
+    typedef struct VkAttachmentDescription{
+        VkAttachmentDescriptionFlags flags;
+        VkFormat format;
+        VkSamplerCountFlagBits samples;
+        VkAttachmentLoadOp loadOp;
+        VkAttachmentStoreOp storeOp;
+        VkAttachmentLoadOp  stencilLoadOp;
+        VkAttachmentStoreOp  stencilStoreOp;
+        VkImageLayout   initialLayout;
+        VkImageLayout   finalLayout;
+    }VkAttachmentDescription;
+
+
+    typedef struct VkSubpassDescription{
+        VkSubpassDescriptionFlags flags;
+        VkPipelineBindPoint pipelineBindPoint;
+        uint32_t    inputAttachmentCount;
+        const VkAttachmentReference*    pInputAttachments;
+        uint32_t    colorAttachmentCount;
+        const VkAttachmentReference* pColorAttachments;
+        const VkAttachmentReference* pResolveAttachments;
+        const VkAttachmentReference* pDepthStencilAttachment;
+        uint32_t preserveAttachmentCount;
+        const uint32_t* pPreserveAttachments;
+    }VkSubpassDescription;
+
+    typedef struct VkAttachmentRefence{
+        uint32_t attachment;
+        VkImageLayout layout;
+    }VkAttachmentRefence;
+
+
+    typedef struct VkSubpassDependency{
+        uint32_t srcSubpass;
+        uint32_t dstSubpass;
+        VkPipelineStageFlags srcStageMask;
+        VkPipelineStageFlags dstStageMask;
+        VkAccessFlags srcAccessMask;
+        VkAccessFlags dstAccessMask;
+        VkDependencyFlags dependencyFlags;
+    }VkSubpassDependency;
+
+    //销毁渲染通道对象
+    void vkDestroyRenderPass(
+        VkDevice device,
+        VkRenderPass renderPass,
+        const VkAllocationCallBack* pAllocator
+    );
+    //帧缓冲区
+    //创建帧缓冲区
+    VkResult vkCreateFramebuffer(
+        VkDevice device,
+        const VkFramebufferCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks*   pAllocator,
+        VaFramebuffer* pFramebuffer
+    );
+
+    typedef struct VkFramebufferCreateInfo{
+        VkStructure sType;
+        const void* pNext;
+        VkFramebufferCreateFlags flags;
+        VkRenderPass renderPass;
+        uint32_t attachmentCount;
+        const VkImageView*  pAttachments;
+        uint32_t width;
+        uint32_t height;
+        uint32_t layers;
+    }VkFramebufferCreateInfo;
+
+    //销毁帧缓冲区
+    void vkDestroyFramebuffer(
+        VkDevice device,
+        VkFramebuffer framebuffer,
+        const VkAllocationCallbacks* pAllocator,
+    )
+
+    //创建一个简单的图形管线
+    //创建图形管线
+    VkResult vkCreateGraphicsPipelines(
+        VkDevice device,
+        VkPipelineCache pipelineCache,
+        uint32_t createInfoCount,
+        const VkGraphicsPipelineCreateInfo* pCreateInfos,
+        const VkAllocationCallbacks* pAllocator,
+        VkPipeline* pPipelines
+    );
+
+    typedef struct VkGraphicsPipelineCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineCreateFlags flags;
+        uint32_t    stageCount;
+        const VkPipelineShaderStageCreateInfo*  pStages;
+        const VkPipelineVertexInputStateCreateInfo* pVertexInputState;
+        const VkPipelineInputAssemblyStateCreateInfo* pInputAssemblyState;
+        const VkPipelineTessellationStateCreateInfo*  pTessellationState;
+        const VkPipelineViewportStateCreateInfo* pViewportState;
+        const VkPipelineRasterizationStateCreateInfo* pRaterizationState;
+        const VkPipelineMultisampleStateCreateInfo* pMultsampleState;
+        const VkPipelineDepthStencilStateCreateInfo* pDepthStencilState;
+        const VkPipelineColorBlendStateCreateInfo* pColorBlendState;
+        const VkPipelineDynamicStateCreateInfo* pDynamicState;
+        VkPipelineLayout layout;
+        VkRenderPass renderPass;
+        uint32_t subpass;
+        VkPipeline basePipelineHandle;
+        int32_t basePipelineIndex;
+    }VkGraphicsPipelineCreateInfo;
+
+    //图形着色器阶段
+    typedef struct VkPipeLineStateCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineShaderStageCreateFlags flags;
+        VkShaderStageFlagBits stage;
+        VkShaderModule module;
+        const char* pName;
+        const VkSpecilalizationInfo* pSepcializationInfo;
+    }VkPipeLineStateCreateInfo;
+
 }
