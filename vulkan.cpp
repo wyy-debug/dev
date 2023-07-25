@@ -1613,4 +1613,264 @@ int main(void)
         const VkSpecilalizationInfo* pSepcializationInfo;
     }VkPipeLineStateCreateInfo;
 
+
+    typedef struct VkPipelineVertexInputStateCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineVertexInputStateCreatefFlags flags;
+        uint32_t vertexBindingDescription;
+        const VkVertexInputBindingDesription* pVertexBingingDesciptions;
+        uint32_t vertexAttributreDescriptionCount;
+        const VkVertexInputAttributeDescription* pVertexAttributeDescriptions;
+    }VkPipelineVertexInputStateCreateInfo;
+
+
+    typedef struct VkVertexInputBindingDesciption {
+        uint32_t binding;
+        uint32_t stride;
+        VkVertexInputRate inputRate;
+    }VkVertexInputBindingDescription;
+
+    typedef struct VkVertexInputAttributeDescription{
+        uint32_t location;
+        uiny32_t binding;
+        VkFormat format;
+        uint32_t offset;
+    }VkVertexInputAttributeDesciption;
+    //输入组装
+    typedef struct VkPipelineInputAssemblyStateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineInputAssemblyStateCreateFlags flags;
+        VkPrimitiveTopology topology;
+        VkBool32 primitiveResatrtEnable;
+    }VkPipelineInputAssemblyStateInfo;
+    //细分状态
+    typedef struct VkPipelineTessellationStateCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineTessellationStateCreateFlags flags;
+        uint32_t patchControlPoints;
+    }VkPipelineTessellationStateCreateInfo;
+
+    //视口状态
+    typedef struct VkPipelineViewportStateCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineViewportStateCreateFlags flags;
+        uint32_t    viewportCount;
+        const VkViewport* pViewport;
+        uint32_t    scissorCount;
+        const VkRect2D* pScissors;
+    }VkPipelineViewportStateCreateInfo;
+
+
+    typedef struct VkViewport{
+        float x;
+        float y;
+        float width;
+        float height;
+        float minDepth;
+        float maxDepth;
+    }VkViewport;
+
+    typedef struct VkRect2D{
+        VkOffset2D offset;
+        VkExtent2D extent;
+    }VkRect2D;
+    
+    //光栅化
+    typedef struct VkPipelineRasterizationStateCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineRaseterizationStateCreateFlags flags;
+        VkBool32 depthClampEnable;
+        VkBool32 reasteriizerDiscardEnable;
+        VkPolygonMode polygonMode;
+        VkCullModeFlags cullMode;
+        VkFrontFace frontFace;
+        VkBool32 depthBiasEnable;
+        float depthBiasConstantFactor;
+        float depthBiasClamp;
+        float depthBiasSlopeFactor;
+        float lineWidth;
+    }VkPipelineRasterizationStateCreateInfo;
+
+    //多重采样状态
+    typedef struct VkPipelineMultisampleStateCreateInfo{
+        VkStructure sType;
+        const void* pNext;
+        VkPipelineMultisampleStateCreateFlags flags;
+        VkSampleCountFlagBits rasterizationSamples;
+        VkBool32    sampleShadingEnable;
+        float   mimSampleShading;
+        const VkSampleMask* pSampleMask;
+        VkBool32    alphaToCoverageEnable;
+        VkBool32    alphaToOneEnable;
+    }VkPipelineMultisampleStateCreateInfo;
+    
+    //深度和模板状态
+    typedef struct VkPipelineDepthStencilStateCreateInfo{
+        VkStructure sType;
+        const void* pNext;
+        VkPipelineDepthStencilStateCreateFlags flags;
+        VkBool32    depthTestEnable;
+        VkBool32 depthWriteEnable;
+        VkCompareOp depthCompareOp;
+        VkBool32    depthBoundsTestEnable;
+        VkBool32    stencilTestEnable;
+        VkStencilOpState front;
+        VkStencilOpState back;
+        float minDepthBounds;
+        float maxDepthBounds;
+    }VkPipelineDepthStencilStateCreateInfo;
+
+    //颜色混合状态
+    typedef struct VkPipelineColorBlendStateCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkPipelineColorBlendStateCreateFlags flags;
+        VkBool32    logicOpEnable;
+        VkLogicOp   logicOp;
+        uint32_t    attachmentCount;
+        const VkPipelineColorBlendAttachmentState* pAttachments;
+        float   blendConstants[4];
+    }VkPipelineColorBlendStateCreateInfo;
+
+    typedef struct VkPipelineColorBlendAttchmentState{
+        VkBool32 blendEnable;
+        VkBlendFactor srcColorBlendFactor;
+        VkBlendFactor dstColorBlendFactor;
+        VkBlendOp   colorBlendOp;
+        VkBlendFactor srcAlphaBlendFactor;
+        VkBlendFactor dstAlphaBlendFactor;
+        VkBlendOp   alphaBlendOp;
+        VkColorComponentFlags colorWriteMask;
+    }VkPipelineColorBlendAttchmentsState;
+
+    //动态状态
+    typedef struct VkPipelineDynamicStateCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkPipelineDynamicStateCreateFlags flags;
+        uint32_t    dynamicStateCount;
+        const VkDynamicState*   pDynamicStates;
+    }VkPipelineDynamicStateCreateInfo;
+
+    //准备绘制
+    //设置当前的渲染对象
+    void vkCmdBeginRenderPass(
+        VkCommandBuffer commandBuffer,
+        const VkRenderPassBeginInfo* pRenderPassBegin,
+        VkSubpassContents contents
+    );
+    typedef struct VkRenderPassBeginInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkRenderPass renderPass;
+        VkFramebuffer framebuffer;
+        VkRect2D    renderArea;
+        uint32_t    clearValueCount;
+        const VkClearValue* pClearValues;
+    }VkRenderPassBeginInfo;
+
+    typedef union VkClearValue{
+        VkClearColorValue color;
+        VkClearDepthStencilValue depthStncil;
+    }VkClearValue;
+
+    typedef union VkClearColorValue{
+        float float32[4];
+        int32_t int32[4];
+        uint32_t uint32[4];
+    }VkClearColorValue;
+
+    typedef struct VkClearDepthStencilValue{
+        float depth;
+        uint32_t stencil;
+    }VkClearDepthStencilValue;
+
+    //终止渲染
+    void vkCmdEndRenderPass(
+        VkCommandBuffer commandBuffer
+    );
+    
+    //顶点数据
+    //把缓冲区当作顶点数据
+    void vkCmdBindVertexBuffers(
+        VkCommandBuffer comandBuffer,
+        uint32_t firstBinding,
+        uint32_t bindingCount,
+        const VkBuffer* pBuffers,
+        const VkDeviceSize* pOffsets
+    )
+    
+    //索引绘制
+    void vkCmdDrawIndexed(
+        VkCommandBuffer commandBuffer,
+        uint32_t    indexCount,
+        uint32_t    instanceCount,
+        uint32_t    firstIndex,
+        int32_t     vertexOffset,
+        uint32_t    firstInstance
+    );
+
+    void vkCmdBindIndexBuffer(
+        VkCommandBuffer commandBuffer,
+        VkBuffer buffer,
+        VkDeviceSize offset,
+        VkIndexType indexType
+    );
+
+
+    typedef struct VkPipelineInputAssemblyStateCreateInfo{
+        VkStructureType     sType;
+        const void*         pNext;
+        VkPipelineInputAssemblyStateCreateFlags flags;
+        VkPrimitiveTopology     topology;
+        VkBool32        primitiveRestartEnable;
+    }VkPipelineInputAssemblyStateCreateInfo;
+    
+    //间接绘制
+    void vkCmdDrawIndirect(
+        VkCommandBuffer commandBuffer,
+        VkBuffer buffer,
+        VkDeviceSize offset,
+        uint32_t    drawCount,
+        uint32_t    stride
+    );
+
+
+    typedef struct VkDrawIndirectCommand{
+        uint32_t vertexCount;
+        uint32_t instanceCount;
+        uint32_t firstVertex;
+        uint32_t firstInstance;
+    }VkDrawIndirectCommand;
+
+    //索引间接绘制
+    void vkCmdDrawIndexedIndirect(
+        VkCommandBuffer commandBuffer,
+        VkBuffer buffer,
+        VkDevice offset,
+        uint32_t drawCount,
+        uint32_t stride
+    );
+
+    typedef struct VkDrawIndexedIndirectCommand{
+        uint32_t    indexCount;
+        uint32_t    instanceCount;
+        uint32_t    firstIndex;
+        int32_t     vertexOffest;
+        uint32_t    firstInstance;
+    }VkDrawIndexedIndirectCommand;
+
+    //表面细分配置
+
+    typedef struct VkPipelineTessellationStateCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkPipelineTessellationStateCreateFlags flags;
+        uint32_t    patchControlPoints;
+    }VkPipelineTessellationStateCreteInfo;
 }
