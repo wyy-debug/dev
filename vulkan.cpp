@@ -1873,4 +1873,378 @@ int main(void)
         VkPipelineTessellationStateCreateFlags flags;
         uint32_t    patchControlPoints;
     }VkPipelineTessellationStateCreteInfo;
+
+    typedef struct VkRect2D {
+        VkOffset2D offset;
+        VkExtent2D extent;
+
+    }VkRect2D;
+
+    typedef struct VkOffset2D {
+        int32_t x;
+        int32_t y;
+    }VkOffset2D;
+
+    typedef struct VkExtent2D {
+        uint32_t width;
+        uint32_t height;
+    }VkExtent2D;
+    //修改裁剪区域
+    void vkCmdSetScissor(
+        VkCommandBuffer commandBuffer,
+        uint32_t firstScissor,
+        const VkRect2D* pScissors
+    );
+    //深度测试模板
+    typedef struct VkPipelineDepthStencilStateCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkPipelineDepthStencilStateCreateFlags flags;
+        VkBool32    depthTestEnable;
+        VkBool32    depthWriteEnable;
+        VkCompareOp    depthCompareOp;
+        VkBool32    depthBoundsTestEnable;
+        VkBool32    stencilTestEnable;
+        VkStencilOpState front;
+        VkStencilOpState back;
+        float minDepthBounds;
+        float maxDepthBounds;
+    }VkPipelineDepthStencilStateCreateInfo;
+
+    //深度最大最小范围设置
+    void vkCmdSetDepthBounds(
+        VkCommandBuffer commandBuffer,
+        float minDepthBounds,
+        float maxDepthBounds
+    );
+
+    //深度偏差
+    typedef struct VkPipelineRasterizationStateCreateInfo{
+        VkStructureType sType;
+        const void*     pNext;
+        VkPipelineRasterizationStateCreateFlags flags;
+        VkBool32        depthClampEnabel;
+        VkBool32        rasterizeDiscardEnable;
+        VkPolygonMode   poloygonMode;
+        VkCullModeFlags cullMode;
+        VkFrontFace     frontFace;
+        VkBool32        depthBiasEnable;
+        float           depthBiasConstantFactor;
+        float           depthBiasClamp;
+        float           depthBiasSlopeFactor;
+        float           lineWidth;
+    }VkPipelineRasterizationStateCreateInfo;
+
+
+    //深度偏差方程参数设置
+    void vkCmdSetDepthBias(
+        VkCommandBuffer commandBuffer,
+        float   depthBiasConstantFactor,
+        float   depthBiasClamp,
+        float   depthBiasSlopeFactor
+    );
+
+    //模板测试
+    typedef struct VkStencilOpState{
+        VkStencilOp failOp;
+        VkStencilOp passOp;
+        VkStencilOp depthFailOp;
+        VkCompareOp compareOp;
+        uint32_t compareMask;
+        uint32_t writeMask;
+        uint32_t refence;
+    }VkStencilOpState;
+
+    //多重采样渲染
+    //返回某种格式的信息
+    VkResult vkGetPhysicalDeviceImageFormatProperties(
+        VkPhysicalDevice physicalDevice,
+        VkFormat         format;
+        VkImageType      type;
+        VkImageTiling    tiling;
+        VkImageUsageFlags usage;
+        VkImageCreateFlags flags;
+        VkImageFormatProperties* pImageFormatProperties
+    );
+
+    //多重采样解析
+    //将多重采样图像解析
+    void vkCmdResolvImage(
+        VkCommandBuffer commandBuffer,
+        VkImage srcImage,
+        VkImageLayout srcImageLayout,
+        VkImage dstImage,
+        VkImageLayout dstImageLayout,
+        uint32_t regionCount,
+        const VkImageResolve* pRegions
+    );
+
+    typedef struct VkImageResolve{
+        VkImageSubresourceLayers srcSubersource;
+        VkOffset3D      srcOffset;
+        VkImageSubresourceLayers dstSubresource;
+        VkOffset3D      dstOffset;
+        VkExtent3D      extent;
+    }VkImageResolve;
+    
+    //颜色混合
+    typedef struct VkPipelineColorBlendAttachmentState {
+        VkBool32    blendEnable;
+        VkBlendFactor srcColorBlendFactor;
+        VkBlendFactor dstColorBlendFactor;
+        VkBlendOp     colorBlendOp;
+        VkBlendFactor srcAlphaBlendFactor;
+        VkBlendFactor dstAlphaBlendFactor;
+        VkBlendOp     alphaBlendOp;
+        VkColorCompoentFlags colorWriteMask;
+    }VkPipelineColorBlendAttachmentState;
+
+    //改变混合常量
+    void vkCmdSetBlendConstants(
+        VkCommandBuffer commandBuffer,
+        const float blendConstants[4]
+    );
+
+    //栅栏
+    VkResult vkCreateFence(
+        VkDevice device,
+        const VkFenceCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkFence*    pFence
+    );
+
+    typedef struct VkFenceCreateInfo {
+        VkStructureType sType;
+        const void*     pNext;
+        VkFenceCreateFlags flags;
+    }VkFenceCreateInfo;
+    
+    //销毁释放
+    void vkDestroyFence(
+        VkDevice device,
+        VkFence  fence,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    VkResult vkQueueSubmit(
+        VkQueue     queue,
+        uint32_t    submitCount,
+        const VkSubmitInfo* pSubmits,
+        VkFence     fence
+    );
+
+    VkResult vkGetFenceStatus(
+        VkDevice device,
+        VkFence fence
+    );
+
+    VkResult vkWaitForFences(
+        VkDevice device,
+        uint32_t fenceCount,
+        const VkFence* pFences,
+        VkBool32 waitAll,
+        uint64_t timeout
+    );
+
+    VkResult vkResetFences(
+        VkDevice device,
+        uint32_t fenceCount,
+        const VkFence* pFences
+    );
+
+    //事件
+    VkResult vkCreateEvent(
+        VkDeivce device,
+        const VkEventCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkEvent* pEvent
+    );
+
+    typedef struct VkEventCreateInfo {
+        VkStructureType sType;
+        const void* pNext;
+        VkEventCreateFlags flags
+    }VkEventCreateInfo;
+
+    void vkDestroyEvent(
+        VkDevice device,
+        VkEvent event,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    VkResult vkSetEvent{
+        VkDevice device,
+        VkEvent event
+    };
+
+    VkResult vkGetEventStatus(
+        VkDevice device,
+        VkEvent event
+    );
+
+    void vkCmdSetEvent(
+        VkCommandBuffer commandBuffer,
+        VkEvent event,
+        VkPipelineStageFlags stageMask
+    );
+
+    void vkCmdResetEvent(
+        VkCommandBuffer commandBuffer,
+        VkEvent event,
+        VkPipelineStageFlags stageMask
+    );
+
+    void vkCmdWaitEvents(
+        VkCommand commandBuffer,
+        uint32_t eventCount,
+        const VkEvent*  pEvents,
+        VkPipelineStageFlags srcStageMask,
+        VkPipelineStageFlags dstStageMask,
+        uint32_t memoryBarrierCount,
+        const VkMemoryBarrier* pMemoryBarriers,
+        uint32_t bufferMemoryBarrierCount,
+        const VkBufferMemoryBarrier* pBufferMemoryBarriers,
+        uint32_t imageMemoryBarrierCount,
+        const VkImageMemoryBarrier* pImageMemoryBarriers
+    );
+
+    //信号量
+    VkResult vkCreateSemaphore(
+        VkDevice device,
+        const VkSemaphoreCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkSemaphore* pSemaphore
+    );
+
+    typedef struct VkSemaphoreCreateInfo {
+        VkStuctureType sType;
+        const void* pNext;
+        VkSemaphoreCreateFlags flags;
+    }VkSemaphoreCreateInfo;
+
+    void VkDestorySemaphore(
+        VkDevice device,
+        VkSemaphore semaphore,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    VkResult vkQueueSubmit(
+        VkQueue queue,
+        uint32_t submitCount,
+        const VkSubmitInfo* pSubmits,
+        VkFence fence
+    );
+
+    typedef struct VkSubmitInfo{
+        VkStuctureType sType;
+        const void*    pNext;
+        const VkSemaphore* pWaitSemaphores;
+        const VkPipelineStageFlags* pWaitDstStageMask;
+        uint32_t commandBufferCount;
+        const VkCommandBuffer* pCommandBuffers;
+        uint32_t signalSempahoreCount;
+        const VkSemaphore* pSignalSemaphores;
+    }VkSubmitInfo;
+
+    //创建查询池
+    VkResult vkCreateQueryPool(
+        VkDevice device,
+        const VkQueryPoolCreateInfo* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkQueryPool* pQueryPool
+    );
+
+    typedef struct VkQueryPoolCreateInfo {
+        VkStructType sType;
+        const void* pNext;
+        VkQueryPoolCreateFlags flags;
+        VkQueryType  queryType;
+        uint32_t     quertCount;
+        VkQueryPipelineStatisticFlags pipelineStatistics;
+    }VkQueryPoolCreateInfo;
+
+    void vkDestoryQueryPool(
+        VkDevice device,
+        VkQueryPool queryPool,
+        const VkAllocationCallbacks* pAllocator
+    );
+
+    void vkCmdResetQueryPool(
+        VkCommandBuffer commandBuffer,
+        VkQueryPool queryPool,
+        uint32_t firstQuery,
+        uiny32_t queryCount
+    );
+
+    void vkCmdBeginQuery(
+        VkCommandBuffer commandBuffer,
+        VkQueryPool queryPool,
+        uint32_t firstQuery,
+        uint32_t queryCount
+    );
+
+
+    void vkCmdBeginQuery(
+        VkCommandBuffer commandBuffer,
+        VkQueryPool queryPool,
+        uint32_t query,
+        VkQueryControlFlags flags
+    );
+
+    VkResult vkGetQueryPoolResults(
+        VkDevice device,
+        VkQueryPool queryPool,
+        uint32_t firstQuery,
+        uint32_t queryCount,
+        size_t  dataSize,
+        void*   pData,
+        VkDeviceSize stride,
+        VkQueryResultFlags flags
+    );
+
+    void vkCmdCopyQueryPoolResults(
+        VkCommandBuffer commandBuffer,
+        VkQueryPool queryPool,
+        uint32_t    firstQuery,
+        uint32_t    queryCount,
+        VkBuffer    dstBuffer,
+        VkDeviceSize dstOffset,
+        VkDeviceSzie stride,
+        VkQueryResultFlags flags
+    );
+
+    void vkCmdWriteTimestamp(
+        VkCommandBuffer commandBuffer,
+        VkPipelineStageFlagBits pipelineStage,
+        VkQueryPool queryPool,
+        uint32_t query
+    );
+
+
+    typedef struct VkRenderPassCreateInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkRenderPassCreateFlags flags;
+        uint32_t attachmentCount;
+        const VkAttchmentDescription* pAttachments;
+        uint32_t subpassCount;
+        const VkSubpassDescription* pSubpasses;
+        uint32_t dependecyCount;
+        const VkSubpassDependency* pDependencies;
+    }VkRenderPassCreateInfo;
+
+    typedef struct VkSubpassDescription{
+        VkSubpassDescriptionFlags flags;
+        VkPipelineBindPoint     pipelineBindPoint;
+        uint32_t                inputAttachmentCount;
+        const VkAttachmentRefence* pInputAttachments;
+        uint32_t    colorAttachmentCount;
+        const VkAttachmentRefence* pColorAttachments;
+        const VkAttachmentRefence* pResolveAttachments;
+        const VkAttachmentRefence* pDepthStencilAttachment;
+        uint32_t preserveAttachmentCount;
+        const uint32_t* pPreserveAttachments;
+    }VkSubpassDescription;
+
+
 }
