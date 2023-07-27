@@ -2246,6 +2246,55 @@ int main(void)
         const uint32_t* pPreserveAttachments;
     }VkSubpassDescription;
 
+    //附件内容
+    //附件初始化
+    //清除渲染通道上的颜色附件
+    void vkCmdClearAttachments(
+        VkCommandBuffer commandBuffer,
+        uint32_t    attachmentCount,
+        const VkClearAttachment*    pAttachments,
+        uint32_t    rectCount,
+        const VkClearRect* pRects
+    );
 
+    typedef struct VkClearAttachment {
+        VkImageAspectFlags aspectMask;
+        uint32_t    colorAttachment;
+        VkClearAttachment clearValue;
+    }VkClearAttachment;
 
+    typedef union VkClearValue {
+        VkClearColorValue color;
+        VkClearDepthStencilValue depthStencil;
+    }VkClearValue;
+
+    typedef struct VkClearRect {
+        VkRect2D rect;
+        uint32_t baseArrayLayer;
+        uint32_t layerCount;
+    }VkClearRect;
+
+    //查询所使用的渲染区域和实现的支持渲染区域粒度匹配
+    void vkGetRenderAreaGranularity(
+        VkDeivce device,
+        VkRenderPass renderPass,
+        VkExtent2D*  pGranularity
+    );
+    //副命令缓冲区
+    void vkCmdExecuteCommands(
+        VkCommandbuffer commandBuffer,
+        uint32_t    commandBufferCount,
+        const VkCommandBuffer* pCommandBuffers
+    );
+
+    typedef struct VkCommandBufferInheritanceInfo{
+        VkStructureType sType;
+        const void* pNext;
+        VkRenderPass renderPass;
+        uint32_t subpass;
+        VkFramebuffer framebuffer;
+        VkBool32    occlusionQueryEnable;
+        VkQueryControlFlags queryFlags;
+        VkQueryPipelineStatisticFlags pipelineStatistics;
+    }VkCommandBufferInheritanceInfo;
 }
